@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class Destroyer : MonoBehaviour
 {
+    const float ExplosionForce = 20f;
+    const float ExplosionRadius = 200f;
+    
     [SerializeField] private int _minMultiplyCount = 2;
     [SerializeField] private int _maxMultiplyCount = 6;
     [SerializeField] private GameObject _cubePrefab;
@@ -35,7 +38,8 @@ public class Destroyer : MonoBehaviour
         for (var i = 0; i < newElementsCount; i++)
         {
             var newObject = Instantiate(_cubePrefab, cube.transform.position, Quaternion.identity);
-            newObject.transform.localScale = Vector3.one / 2;
+            newObject.transform.localScale = cube.transform.localScale / 2;
+            newObject.GetComponent<Rigidbody>().AddExplosionForce(ExplosionForce, cube.transform.position, ExplosionRadius);
         }
 
         DestroyObject(cube);
