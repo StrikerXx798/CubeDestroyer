@@ -2,15 +2,32 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    const string Horizontal = "Horizontal";
-    const string Vertical = "Vertical";
+    [SerializeField] private float _speed = 30f;
 
-    [SerializeField] private float _speed;
+    private Vector3 _moveDirection;
 
-    void Update()
+    private void OnEnable()
     {
-        var direction = new Vector3(Input.GetAxis(Horizontal), 0f, Input.GetAxis(Vertical));
+        InputReader.Instance.OnMovementInput += HandleMovementInput;
+    }
 
-        transform.Translate(direction * (_speed * Time.deltaTime));
+    private void OnDisable()
+    {
+        InputReader.Instance.OnMovementInput -= HandleMovementInput;
+    }
+
+    private void HandleMovementInput(Vector3 movementInput)
+    {
+        _moveDirection = movementInput;
+    }
+
+    private void Update()
+    {
+        Move();
+    }
+
+    private void Move()
+    {
+        transform.Translate(_moveDirection * (_speed * Time.deltaTime));
     }
 }

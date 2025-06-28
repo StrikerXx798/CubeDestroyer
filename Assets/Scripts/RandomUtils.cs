@@ -1,25 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using UnityEngine;
 using Random = System.Random;
 
-static class RandomUtils
+public static class RandomUtils
 {
     private static readonly Random _random = new Random();
-    private static readonly List<bool> _boolVariants = new List<bool>() { true };
 
-    public static int Next(int minValue, int maxValue)
+    private static float NextFloat()
     {
-        return _random.Next(minValue, maxValue);
+        return (float)_random.NextDouble();
     }
 
-    public static bool NextBool()
+    public static bool ShouldSplit(int level)
     {
-        var index = _random.Next(0, _boolVariants.Count);
-        var newCount = _boolVariants.Count * 2;
-        var variant = _boolVariants[index];
-
-        while (_boolVariants.Count != newCount)
-            _boolVariants.Add(false);
-
-        return variant;
+        var probability = 1f / Mathf.Pow(2f, level - 1);
+        
+        return NextFloat() < probability;
     }
 }
