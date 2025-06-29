@@ -4,9 +4,9 @@ using System;
 public class RayCaster : MonoBehaviour
 {
     [SerializeField] private InputReader _inputReader;
-    
+
     private Camera _mainCamera;
-    
+
     public event Action<Cube> OnCubeHit;
 
 
@@ -38,7 +38,8 @@ public class RayCaster : MonoBehaviour
 
     private void PerformRaycast()
     {
-        if (!_mainCamera) return;
+        if (_mainCamera is null)
+            return;
 
         var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
 

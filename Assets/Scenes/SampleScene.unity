@@ -615,7 +615,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0360661a43da469f81ac0ef183f794cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cubePrefab: {fileID: 3503626777020375273, guid: 56be9202f1852d6418d559a396a9f0a3, type: 3}
+  _cubePrefab: {fileID: 3953494080243862663, guid: 56be9202f1852d6418d559a396a9f0a3, type: 3}
   _cubesContainer: {fileID: 0}
 --- !u!1 &872554312
 GameObject:

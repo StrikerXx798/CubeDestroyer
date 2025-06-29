@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CubeSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject _cubePrefab;
+    [SerializeField] private Cube _cubePrefab;
     [SerializeField] private Transform _cubesContainer;
 
     private void Awake()
@@ -29,16 +29,13 @@ public class CubeSpawner : MonoBehaviour
             var spawnPosition = position + Random.insideUnitSphere * 0.5f;
             var cube = Instantiate(_cubePrefab, spawnPosition, Random.rotation);
 
-            if (cube.TryGetComponent<Cube>(out var cubeComponent))
+            if (_cubesContainer is not null)
             {
-                if (_cubesContainer is not null)
-                {
-                    cube.transform.SetParent(_cubesContainer);
-                }
-
-                cubeComponent.Initialize(level, scale);
-                newCubes.Add(cubeComponent);
+                cube.transform.SetParent(_cubesContainer);
             }
+
+            cube.Initialize(level, scale);
+            newCubes.Add(cube);
         }
 
         return newCubes;

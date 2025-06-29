@@ -1,9 +1,14 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))] 
-public class Cube : MonoBehaviour
+[RequireComponent(typeof(Rigidbody))] public class Cube : MonoBehaviour
 {
     private const float Opacity = 1f;
+    private const float MinHue = 0f;
+    private const float MaxHue = 1f;
+    private const float MinSaturation = 0.7f;
+    private const float MaxSaturation = 1f;
+    private const float MinBrightness = 0.7f;
+    private const float MaxBrightness = 1f;
 
     private Renderer _renderer;
 
@@ -27,12 +32,17 @@ public class Cube : MonoBehaviour
     {
         if (_renderer is null) return;
 
-        var randomColor = new Color(
-            Random.value,
-            Random.value,
-            Random.value,
+        var randomColor = Random.ColorHSV(
+            MinHue,
+            MaxHue,
+            MinSaturation,
+            MaxSaturation,
+            MinBrightness,
+            MaxBrightness,
+            Opacity,
             Opacity
         );
+
 
         _renderer.material.color = randomColor;
     }
