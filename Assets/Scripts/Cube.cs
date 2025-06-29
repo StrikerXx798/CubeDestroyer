@@ -9,11 +9,15 @@
     private const float MaxSaturation = 1f;
     private const float MinBrightness = 0.7f;
     private const float MaxBrightness = 1f;
+    private const float ExplodeEffectDuration = 1f;
+
+    [SerializeField] private GameObject _explosionEffectPrefab;
 
     private Renderer _renderer;
 
     public int Level { get; private set; } = 1;
     public Rigidbody Rigidbody { get; private set; }
+    public Color Color { get; private set; }
 
     private void Awake()
     {
@@ -32,7 +36,7 @@
     {
         if (_renderer is null) return;
 
-        var randomColor = Random.ColorHSV(
+        Color = Random.ColorHSV(
             MinHue,
             MaxHue,
             MinSaturation,
@@ -43,7 +47,16 @@
             Opacity
         );
 
+        _renderer.material.color = Color;
+    }
 
-        _renderer.material.color = randomColor;
+    public void CreateDestructionEffect()
+    {
+        if (_explosionEffectPrefab)
+        {
+            var effect = Instantiate(_explosionEffectPrefab, transform.position, Quaternion.identity);
+
+            Destroy(effect, ExplodeEffectDuration);
+        }
     }
 }

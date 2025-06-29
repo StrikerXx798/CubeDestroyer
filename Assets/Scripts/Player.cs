@@ -5,7 +5,7 @@ public class Player : MonoBehaviour
 {
     private const float SplitScaleDivider = 2f;
     private const int SplitLevelIncrement = 1;
-    
+
     [SerializeField] private RayCaster _rayCaster;
     [SerializeField] private Exploder _exploder;
     [SerializeField] private CubeSpawner _cubeSpawner;
@@ -30,30 +30,45 @@ public class Player : MonoBehaviour
 
     private void HandleCubeHit(Cube cube)
     {
-        if (cube is not null)
+        if (cube is null)
+            return;
+
+        var position = cube.transform.position;
+        var scale = cube.transform.localScale;
+        var level = cube.Level;
+        var shouldSplit = RandomUtils.ShouldSplit(level);
+
+        if (shouldSplit)
         {
-            var level = cube.Level;
-            var shouldSplit = RandomUtils.ShouldSplit(level);
-
-            if (shouldSplit)
-            {
-                var position = cube.transform.position;
-                var scale = cube.transform.localScale;
-                var childCount = Random.Range(_minCubeCount, _maxCubeCount + 1);
-                var childScale = scale / SplitScaleDivider;
-                var childLevel = level + SplitLevelIncrement;
-
-                var newCubes = _cubeSpawner.SpawnCubes(
-                    position,
-                    childLevel,
-                    childScale,
-                    childCount);
-
-                var rigidBodies = newCubes.Select(newCube => newCube.Rigidbody).ToList();
-                _exploder.ExplodeCubes(rigidBodies, position);
-            }
-
-            Destroy(cube.gameObject);
+            SplitCube(position, scale, level);
         }
+        else
+        {
+            ExplodeCube(cube, position, level);
+        }
+
+        Destroy(cube.gameObject);
+    }
+
+    private void SplitCube(Vector3 position, Vector3 scale, int level)
+    {
+        var childCount = Random.Range(_minCubeCount, _maxCubeCount + 1);
+        var childScale = scale / SplitScaleDivider;
+        var childLevel = level + SplitLevelIncrement;
+
+        var newCubes = _cubeSpawner.SpawnCubes(
+            position,
+            childLevel,
+            childScale,
+            childCount);
+
+        var rigidBodies = newCubes.Select(newCube => newCube.Rigidbody).ToList();
+        _exploder.ExplodeCubes(rigidBodies, position);
+    }
+    
+    private void ExplodeCube(Cube cube, Vector3 position, int level)
+    {
+        _exploder.CreateExplosion(position, level);
+        cube.CreateDestructionEffect();
     }
 }
