@@ -12,19 +12,6 @@ public class InputReader : MonoBehaviour
     public event Action<Vector3> OnLookInput;
     public event Action OnLeftClickInput;
 
-    private static InputReader _instance;
-
-    public static InputReader Instance
-    {
-        get
-        {
-            if (_instance is null)
-                _instance = new GameObject("InputReader").AddComponent<InputReader>();
-
-            return _instance;
-        }
-    }
-
     private void Update()
     {
         ReadMovementInput();

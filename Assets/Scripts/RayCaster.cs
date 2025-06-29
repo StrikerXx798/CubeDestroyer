@@ -3,9 +3,12 @@ using System;
 
 public class RayCaster : MonoBehaviour
 {
+    [SerializeField] private InputReader _inputReader;
+    
+    private Camera _mainCamera;
+    
     public event Action<Cube> OnCubeHit;
 
-    private Camera _mainCamera;
 
     private void Awake()
     {
@@ -14,17 +17,17 @@ public class RayCaster : MonoBehaviour
 
     private void OnEnable()
     {
-        if (InputReader.Instance != null)
+        if (_inputReader != null)
         {
-            InputReader.Instance.OnLeftClickInput += HandleLeftClickInput;
+            _inputReader.OnLeftClickInput += HandleLeftClickInput;
         }
     }
 
     private void OnDisable()
     {
-        if (InputReader.Instance != null)
+        if (_inputReader != null)
         {
-            InputReader.Instance.OnLeftClickInput -= HandleLeftClickInput;
+            _inputReader.OnLeftClickInput -= HandleLeftClickInput;
         }
     }
 

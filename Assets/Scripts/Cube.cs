@@ -1,22 +1,24 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))] public class Cube : MonoBehaviour
+[RequireComponent(typeof(Rigidbody))] 
+public class Cube : MonoBehaviour
 {
     private const float Opacity = 1f;
-    [SerializeField] private int _level = 1;
 
     private Renderer _renderer;
 
-    public int Level => _level;
+    public int Level { get; private set; } = 1;
+    public Rigidbody Rigidbody { get; private set; }
 
     private void Awake()
     {
         _renderer = GetComponent<Renderer>();
+        Rigidbody = GetComponent<Rigidbody>();
     }
 
     public void Initialize(int level, Vector3 scale)
     {
-        _level = level;
+        Level = level;
         transform.localScale = scale;
         SetRandomColor();
     }

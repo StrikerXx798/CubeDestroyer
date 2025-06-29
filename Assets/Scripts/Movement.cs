@@ -3,17 +3,20 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     [SerializeField] private float _speed = 30f;
+    [SerializeField] private InputReader _inputReader;
 
     private Vector3 _moveDirection;
 
     private void OnEnable()
     {
-        InputReader.Instance.OnMovementInput += HandleMovementInput;
+        if (_inputReader != null)
+            _inputReader.OnMovementInput += HandleMovementInput;
     }
 
     private void OnDisable()
     {
-        InputReader.Instance.OnMovementInput -= HandleMovementInput;
+        if (_inputReader != null)
+            _inputReader.OnMovementInput -= HandleMovementInput;
     }
 
     private void HandleMovementInput(Vector3 movementInput)

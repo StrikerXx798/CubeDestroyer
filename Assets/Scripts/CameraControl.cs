@@ -1,21 +1,23 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(InputReader))]
 public class CameraControl : MonoBehaviour
 {
     [SerializeField] private float _speed = 50f;
     [SerializeField] private Transform _camera;
     [SerializeField] private Transform _body;
+    [SerializeField] private InputReader _inputReader;
 
     private Vector3 _lookInput;
 
     private void OnEnable()
     {
-        InputReader.Instance.OnLookInput += HandleLookInput;
+        _inputReader.OnLookInput += HandleLookInput;
     }
 
     private void OnDisable()
     {
-        InputReader.Instance.OnLookInput -= HandleLookInput;
+        _inputReader.OnLookInput -= HandleLookInput;
     }
 
     private void HandleLookInput(Vector3 lookInput)
