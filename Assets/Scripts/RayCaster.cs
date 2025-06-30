@@ -7,8 +7,7 @@ public class RayCaster : MonoBehaviour
 
     private Camera _mainCamera;
 
-    public event Action<Cube> OnCubeHit;
-
+    public event Action<Cube> CubeHit;
 
     private void Awake()
     {
@@ -19,7 +18,7 @@ public class RayCaster : MonoBehaviour
     {
         if (_inputReader != null)
         {
-            _inputReader.OnLeftClickInput += HandleLeftClickInput;
+            _inputReader.PrimaryActionPerformed += PerformRaycast;
         }
     }
 
@@ -27,13 +26,8 @@ public class RayCaster : MonoBehaviour
     {
         if (_inputReader != null)
         {
-            _inputReader.OnLeftClickInput -= HandleLeftClickInput;
+            _inputReader.PrimaryActionPerformed -= PerformRaycast;
         }
-    }
-
-    private void HandleLeftClickInput()
-    {
-        PerformRaycast();
     }
 
     private void PerformRaycast()
@@ -47,7 +41,7 @@ public class RayCaster : MonoBehaviour
         {
             if (hit.collider.TryGetComponent<Cube>(out Cube cube))
             {
-                OnCubeHit?.Invoke(cube);
+                CubeHit?.Invoke(cube);
             }
         }
     }

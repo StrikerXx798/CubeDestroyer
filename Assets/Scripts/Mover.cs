@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public class Mover : MonoBehaviour
 {
     [SerializeField] private float _speed = 30f;
     [SerializeField] private InputReader _inputReader;
@@ -10,16 +10,16 @@ public class Movement : MonoBehaviour
     private void OnEnable()
     {
         if (_inputReader != null)
-            _inputReader.OnMovementInput += HandleMovementInput;
+            _inputReader.MovementInputReceived += OnMovementInputReceived;
     }
 
     private void OnDisable()
     {
         if (_inputReader != null)
-            _inputReader.OnMovementInput -= HandleMovementInput;
+            _inputReader.MovementInputReceived -= OnMovementInputReceived;
     }
 
-    private void HandleMovementInput(Vector3 movementInput)
+    private void OnMovementInputReceived(Vector3 movementInput)
     {
         _moveDirection = movementInput;
     }

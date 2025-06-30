@@ -20,12 +20,12 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
-        _rayCaster.OnCubeHit += HandleCubeHit;
+        _rayCaster.CubeHit += HandleCubeHit;
     }
 
     private void OnDisable()
     {
-        _rayCaster.OnCubeHit -= HandleCubeHit;
+        _rayCaster.CubeHit -= HandleCubeHit;
     }
 
     private void HandleCubeHit(Cube cube)
@@ -47,7 +47,7 @@ public class Player : MonoBehaviour
             ExplodeCube(cube, position, level);
         }
 
-        Destroy(cube.gameObject);
+        cube.DestroyCube();
     }
 
     private void SplitCube(Vector3 position, Vector3 scale, int level)
@@ -65,10 +65,10 @@ public class Player : MonoBehaviour
         var rigidBodies = newCubes.Select(newCube => newCube.Rigidbody).ToList();
         _exploder.ExplodeCubes(rigidBodies, position);
     }
-    
+
     private void ExplodeCube(Cube cube, Vector3 position, int level)
     {
         _exploder.CreateExplosion(position, level);
-        cube.CreateDestructionEffect();
+        cube.CreateDestructionEffect(position);
     }
 }

@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
+using System;
+using Random = UnityEngine.Random;
 
-[RequireComponent(typeof(Rigidbody))] public class Cube : MonoBehaviour
+[RequireComponent(typeof(Rigidbody))]
+public class Cube : MonoBehaviour
 {
     private const float Opacity = 1f;
     private const float MinHue = 0f;
@@ -11,9 +14,10 @@
     private const float MaxBrightness = 1f;
     private const float ExplodeEffectDuration = 1f;
 
-    [SerializeField] private GameObject _explosionEffectPrefab;
-
+    [SerializeField] private ExplosionEffect _explosionEffectPrefab;
     private Renderer _renderer;
+
+    public event Action<Cube> Destroyed;
 
     public int Level { get; private set; } = 1;
     public Rigidbody Rigidbody { get; private set; }
@@ -34,7 +38,8 @@
 
     private void SetRandomColor()
     {
-        if (_renderer is null) return;
+        if (_renderer is null)
+			return;
 
         Color = Random.ColorHSV(
             MinHue,
@@ -50,13 +55,13 @@
         _renderer.material.color = Color;
     }
 
-    public void CreateDestructionEffect()
+    public void DestroyCube()
     {
-        if (_explosionEffectPrefab)
-        {
-            var effect = Instantiate(_explosionEffectPrefab, transform.position, Quaternion.identity);
+        Destroyed?.Invoke(this);
+    }
 
-            Destroy(effect, ExplodeEffectDuration);
-        }
+    public void CreateDestructionEffect(Vector3 position)
+    {
+        _explosionEffectPrefab.Play(position);
     }
 }

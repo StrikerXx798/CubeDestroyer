@@ -1,10 +1,15 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class CubeSpawner : MonoBehaviour
 {
+    private const float AreaSizeStep = 0.5f;
+    private const int InitialCubeLevel = 1;
+
     [SerializeField] private Cube _cubePrefab;
     [SerializeField] private Transform _cubesContainer;
+    [SerializeField] private int _initialCubeCount = 5;
 
     private void Awake()
     {
@@ -15,8 +20,22 @@ public class CubeSpawner : MonoBehaviour
     {
         if (_cubesContainer is null)
         {
-            var container = new GameObject("Cubes Container");
-            _cubesContainer = container.transform;
+            var container = new GameObject("Cubes Container").transform;
+            _cubesContainer = container;
+        }
+    }
+
+    private void Start()
+    {
+        SpawnInitialCubes();
+    }
+
+    private void SpawnInitialCubes()
+    {
+        for (var i = 0; i < _initialCubeCount; i++)
+        {
+            var spawnPosition = Vector3.zero;
+            SpawnCubes(spawnPosition, InitialCubeLevel, Vector3.one, 1);
         }
     }
 
@@ -35,9 +54,16 @@ public class CubeSpawner : MonoBehaviour
             }
 
             cube.Initialize(level, scale);
+            cube.Destroyed += OnCubeDestroyed;
             newCubes.Add(cube);
         }
 
         return newCubes;
+    }
+
+    private void OnCubeDestroyed(Cube cube)
+    {
+        cube.Destroyed -= OnCubeDestroyed;
+        Destroy(cube.gameObject);
     }
 }

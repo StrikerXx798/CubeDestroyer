@@ -12,15 +12,15 @@ public class CameraControl : MonoBehaviour
 
     private void OnEnable()
     {
-        _inputReader.OnLookInput += HandleLookInput;
+        _inputReader.LookInputReceived += OnLookInputReceived;
     }
 
     private void OnDisable()
     {
-        _inputReader.OnLookInput -= HandleLookInput;
+        _inputReader.LookInputReceived -= OnLookInputReceived;
     }
 
-    private void HandleLookInput(Vector3 lookInput)
+    private void OnLookInputReceived(Vector3 lookInput)
     {
         _lookInput = lookInput;
     }

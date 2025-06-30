@@ -7,35 +7,36 @@ public class InputReader : MonoBehaviour
     const string Vertical = "Vertical";
     const string MouseX = "Mouse X";
     const string MouseY = "Mouse Y";
+    private const int PrimaryActionMouseButton = 0; // заменили магическое число
 
-    public event Action<Vector3> OnMovementInput;
-    public event Action<Vector3> OnLookInput;
-    public event Action OnLeftClickInput;
+    public event Action<Vector3> MovementInputReceived;
+    public event Action<Vector3> LookInputReceived;
+    public event Action PrimaryActionPerformed;
 
     private void Update()
     {
         ReadMovementInput();
         ReadLookInput();
-        ReadLeftClickInput();
+        ReadPrimaryActionInput();
     }
 
     private void ReadMovementInput()
     {
         var movement = new Vector3(Input.GetAxis(Horizontal), 0f, Input.GetAxis(Vertical));
-        OnMovementInput?.Invoke(movement);
+        MovementInputReceived?.Invoke(movement);
     }
 
     private void ReadLookInput()
     {
         var look = new Vector3(Input.GetAxis(MouseX), Input.GetAxis(MouseY), 0f);
-        OnLookInput?.Invoke(look);
+        LookInputReceived?.Invoke(look);
     }
 
-    private void ReadLeftClickInput()
+    private void ReadPrimaryActionInput()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(PrimaryActionMouseButton))
         {
-            OnLeftClickInput?.Invoke();
+            PrimaryActionPerformed?.Invoke();
         }
     }
 }
